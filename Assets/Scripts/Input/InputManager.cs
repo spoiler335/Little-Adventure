@@ -10,4 +10,8 @@ public class InputManager
         inputActions = new PlayerControls();
         inputActions.Enable();
     }
+
+    public float GetForward() => inputActions.Player.Movement.ReadValue<Vector2>().x;
+    public float GetRight() => inputActions.Player.Movement.ReadValue<Vector2>().y;
+
 }
