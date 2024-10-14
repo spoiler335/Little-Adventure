@@ -14,4 +14,5 @@ public class InputManager
     public float GetForward() => inputActions.Player.Movement.ReadValue<Vector2>().x;
     public float GetRight() => inputActions.Player.Movement.ReadValue<Vector2>().y;
 
+    public bool IsAttackClicked() => inputActions.Player.Attack.WasPressedThisFrame();
 }

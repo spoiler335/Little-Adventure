@@ -35,5 +35,5 @@ public class EnemyController : MonoBehaviour
         }
     }
 
-    private void FixedUpdate() => CalculateEnemyMovement();
+    private void Update() => CalculateEnemyMovement();
 }
