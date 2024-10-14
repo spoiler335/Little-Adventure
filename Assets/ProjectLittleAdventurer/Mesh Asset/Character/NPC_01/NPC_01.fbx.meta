@@ -92,15 +92,15 @@ ModelImporter:
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
       events:
-      - time: 0.9404762
-        functionName: BurstFootStep
+      - time: 0.984127
+        functionName: AttackAnimEnds
         data: 
         objectReferenceParameter: {instanceID: 0}
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
-      - time: 0.5079365
-        functionName: BurstFootStep
+      - time: 0.5119048
+        functionName: PlaySmashVfx
         data: 
         objectReferenceParameter: {instanceID: 0}
         floatParameter: 0

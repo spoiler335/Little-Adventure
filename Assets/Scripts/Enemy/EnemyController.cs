@@ -11,6 +11,7 @@ public class EnemyController : MonoBehaviour
     private NavMeshAgent agent;
     private Animator anim;
     private int speedHash;
+    private CharacterState currentCharacterState;
 
     private void Awake()
     {
@@ -18,6 +19,11 @@ public class EnemyController : MonoBehaviour
         agent = GetComponent<NavMeshAgent>();
         anim = GetComponent<Animator>();
         speedHash = Animator.StringToHash("Speed");
+    }
+
+    private void Start()
+    {
+        currentCharacterState = CharacterState.Normal;
     }
 
     private void CalculateEnemyMovement()
@@ -32,8 +38,49 @@ public class EnemyController : MonoBehaviour
         {
             agent.isStopped = true;
             anim.SetFloat(speedHash, 0);
+            SwitchStateTo(CharacterState.Attacking);
         }
     }
 
-    private void Update() => CalculateEnemyMovement();
+    private void SwitchStateTo(CharacterState newState)
+    {
+        switch (currentCharacterState)
+        {
+            case CharacterState.Normal:
+                break;
+            case CharacterState.Attacking:
+                break;
+        }
+
+        switch (newState)
+        {
+            case CharacterState.Normal:
+                break;
+            case CharacterState.Attacking:
+                transform.rotation = Quaternion.LookRotation(playerTrans.position - transform.position);
+                anim.SetTrigger("Attack");
+                break;
+        }
+
+        currentCharacterState = newState;
+
+        Debug.Log($"Enemy Swiching State To :: {currentCharacterState}");
+    }
+    public void AttackAnimEnds()
+    {
+        Debug.Log($"Enemy Attack Animation Ends");
+        SwitchStateTo(CharacterState.Normal);
+    }
+
+    private void Update()
+    {
+        switch (currentCharacterState)
+        {
+            case CharacterState.Normal:
+                CalculateEnemyMovement();
+                break;
+            case CharacterState.Attacking:
+                break;
+        }
+    }
 }
