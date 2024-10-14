@@ -5,6 +5,12 @@ public class PlayerVFXManager : MonoBehaviour
 {
     [SerializeField] private VisualEffect footvisualEffect;
     [SerializeField] private ParticleSystem blade01;
+    [SerializeField] private VisualEffect slashVfx;
+
+    private void Awake()
+    {
+        EventsModel.PLAY_SLASH_VFX += PlaySlashVfx;
+    }
 
     public void UpdateFootStep(bool state)
     {
@@ -15,5 +21,16 @@ public class PlayerVFXManager : MonoBehaviour
     public void PlayBlade01Vfx()
     {
         blade01.Play();
+    }
+
+    private void PlaySlashVfx(Vector3 pos)
+    {
+        slashVfx.transform.position = pos;
+        slashVfx.Play();
+    }
+
+    private void OnDestroy()
+    {
+        EventsModel.PLAY_SLASH_VFX -= PlaySlashVfx;
     }
 }

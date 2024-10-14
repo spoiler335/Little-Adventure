@@ -19,7 +19,28 @@ public class DamageCaster : MonoBehaviour
     {
         if (other.CompareTag(targetTag) && !damageTargetList.Contains(other))
         {
-            other.GetComponent<Health>().ApplyDamage(damageAmt);
+            if (other.TryGetComponent(out EnemyController enemy))
+            {
+                enemy.ApplyDamage(damageAmt);
+            }
+
+            if (other.TryGetComponent(out PlayerController player))
+            {
+                player.ApplyDamage(damageAmt);
+            }
+
+            RaycastHit hit;
+
+            Vector3 originalPos = transform.position - damageCasterCollider.bounds.extents.z * transform.forward;
+
+            bool isHit = Physics.BoxCast(originalPos, damageCasterCollider.bounds.extents / 2, transform.forward, out hit, transform.rotation, damageCasterCollider.bounds.extents.z, 1 << 6);
+
+            if (isHit)
+            {
+                EventsModel.PLAY_SLASH_VFX?.Invoke(hit.point + new Vector3(0, 0.5f, 0));
+            }
+
+            EventsModel.PLAY_ENEMY_BEGIN_HIT_VFX?.Invoke(transform.parent.position);
 
             damageTargetList.Add(other);
         }

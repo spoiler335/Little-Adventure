@@ -15,12 +15,13 @@ public class PlayerController : MonoBehaviour
     private float attackStartTime;
     private float attackSlideDuration = 0.1f;
     private float attackSlideSpeed = 1.5f;
-
+    private Health health;
     private InputManager input => DI.di.input;
     private void Awake()
     {
         character = GetComponent<CharacterController>();
         animator = GetComponent<Animator>();
+        health = GetComponent<Health>();
     }
     private void Start()
     {
@@ -85,6 +86,7 @@ public class PlayerController : MonoBehaviour
             case CharacterState.Normal:
                 break;
             case CharacterState.Attacking:
+                DisableDamageCaster();
                 break;
         }
 
@@ -107,6 +109,11 @@ public class PlayerController : MonoBehaviour
     {
         Debug.Log($"Player Attack Animation Ends");
         SwitchStateTo(CharacterState.Normal);
+    }
+
+    public void ApplyDamage(int damageAmt)
+    {
+        health.ApplyDamage(damageAmt);
     }
 
     public void EnableDamageCaster() => damageCaster.EnableDamageCaster();

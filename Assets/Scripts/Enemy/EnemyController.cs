@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -12,6 +13,9 @@ public class EnemyController : MonoBehaviour
     private Animator anim;
     private int speedHash;
     private CharacterState currentCharacterState;
+    private MaterialPropertyBlock materialPropertyBlock;
+    private SkinnedMeshRenderer skinnedMeshRenderer;
+    private Health health;
 
     private void Awake()
     {
@@ -19,6 +23,10 @@ public class EnemyController : MonoBehaviour
         agent = GetComponent<NavMeshAgent>();
         anim = GetComponent<Animator>();
         speedHash = Animator.StringToHash("Speed");
+        skinnedMeshRenderer = GetComponentInChildren<SkinnedMeshRenderer>();
+        materialPropertyBlock = new MaterialPropertyBlock();
+        skinnedMeshRenderer.GetPropertyBlock(materialPropertyBlock);
+        health = GetComponent<Health>();
     }
 
     private void Start()
@@ -72,6 +80,13 @@ public class EnemyController : MonoBehaviour
         SwitchStateTo(CharacterState.Normal);
     }
 
+    public void ApplyDamage(int damageAmt)
+    {
+        health.ApplyDamage(damageAmt);
+
+        StartCoroutine(MaterialBlink());
+    }
+
     private void Update()
     {
         switch (currentCharacterState)
@@ -82,5 +97,16 @@ public class EnemyController : MonoBehaviour
             case CharacterState.Attacking:
                 break;
         }
+    }
+
+    private IEnumerator MaterialBlink()
+    {
+        materialPropertyBlock.SetFloat("_blink", 0.4f);
+        skinnedMeshRenderer.SetPropertyBlock(materialPropertyBlock);
+
+        yield return new WaitForSeconds(0.2f);
+
+        materialPropertyBlock.SetFloat("_blink", 0);
+        skinnedMeshRenderer.SetPropertyBlock(materialPropertyBlock);
     }
 }
