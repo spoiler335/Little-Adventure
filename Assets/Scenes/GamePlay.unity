@@ -509,6 +509,73 @@ MonoBehaviour:
   m_LightCookieSize: {x: 1, y: 1}
   m_LightCookieOffset: {x: 0, y: 0}
   m_SoftShadowQuality: 0
+--- !u!1 &308616451
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 308616452}
+  - component: {fileID: 308616453}
+  - component: {fileID: 308616454}
+  m_Layer: 0
+  m_Name: DamageCaster
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &308616452
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 308616451}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 1.15, z: 1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1296684859}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &308616453
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 308616451}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.8, y: 1, z: 2}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &308616454
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 308616451}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c0e33aaabccc1664fb18772ca3c84e9d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  targetTag: Enemy
 --- !u!114 &394951724
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1690,6 +1757,7 @@ GameObject:
   - component: {fileID: 1296684861}
   - component: {fileID: 1296684862}
   - component: {fileID: 1296684863}
+  - component: {fileID: 1296684864}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -1712,6 +1780,7 @@ Transform:
   m_Children:
   - {fileID: 986100618}
   - {fileID: 147224934}
+  - {fileID: 308616452}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!143 &1296684860
@@ -1752,6 +1821,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 97ca7f39040734a40bfd4e03cf2912e8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  damageCaster: {fileID: 308616454}
 --- !u!95 &1296684862
 Animator:
   serializedVersion: 5
@@ -1787,6 +1857,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   footvisualEffect: {fileID: 1900909606}
   blade01: {fileID: 621868382}
+--- !u!114 &1296684864
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1296684858}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fa5d099a710d34642bdb5f474cef746d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &1301552627
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2632,9 +2714,10 @@ GameObject:
   - component: {fileID: 1639812703}
   - component: {fileID: 1639812704}
   - component: {fileID: 1639812705}
+  - component: {fileID: 1639812706}
   m_Layer: 0
   m_Name: Enemy_01
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -2751,6 +2834,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   footStep: {fileID: 961800232}
   smashVfx: {fileID: 2103003432}
+--- !u!114 &1639812706
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1639812698}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fa5d099a710d34642bdb5f474cef746d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &1651719034
 MonoBehaviour:
   m_ObjectHideFlags: 0

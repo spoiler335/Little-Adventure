@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+    [SerializeField] private DamageCaster damageCaster;
     private CharacterController character;
     private float moveSpeed = 10f;
     private Vector3 movementVelocity;
@@ -107,6 +108,9 @@ public class PlayerController : MonoBehaviour
         Debug.Log($"Player Attack Animation Ends");
         SwitchStateTo(CharacterState.Normal);
     }
+
+    public void EnableDamageCaster() => damageCaster.EnableDamageCaster();
+    public void DisableDamageCaster() => damageCaster.DisableDamageCaster();
 }
 
 public enum CharacterState
