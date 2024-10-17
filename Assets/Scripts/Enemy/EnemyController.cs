@@ -5,6 +5,7 @@ using UnityEngine.AI;
 public class EnemyController : MonoBehaviour
 {
     [SerializeField] private Transform playerTrans;
+    [SerializeField] private GameObject healthOrb;
 
     private CharacterController character;
     private float moveSpeed = 2f;
@@ -58,6 +59,8 @@ public class EnemyController : MonoBehaviour
                 break;
             case CharacterState.Attacking:
                 break;
+            case CharacterState.Dead:
+                return;
         }
 
         switch (newState)
@@ -67,6 +70,11 @@ public class EnemyController : MonoBehaviour
             case CharacterState.Attacking:
                 transform.rotation = Quaternion.LookRotation(playerTrans.position - transform.position);
                 anim.SetTrigger("Attack");
+                break;
+            case CharacterState.Dead:
+                character.enabled = false;
+                anim.SetTrigger("Death");
+                StartCoroutine(MaterialDissolve());
                 break;
         }
 
@@ -84,6 +92,8 @@ public class EnemyController : MonoBehaviour
     {
         health.ApplyDamage(damageAmt);
 
+        if (health.currentHealth <= 0) SwitchStateTo(CharacterState.Dead);
+
         StartCoroutine(MaterialBlink());
     }
 
@@ -96,6 +106,8 @@ public class EnemyController : MonoBehaviour
                 break;
             case CharacterState.Attacking:
                 break;
+            case CharacterState.Dead:
+                return;
         }
     }
 
@@ -108,5 +120,35 @@ public class EnemyController : MonoBehaviour
 
         materialPropertyBlock.SetFloat("_blink", 0);
         skinnedMeshRenderer.SetPropertyBlock(materialPropertyBlock);
+    }
+
+    private IEnumerator MaterialDissolve()
+    {
+        yield return new WaitForSeconds(2f);
+
+        float dissolveTimeDuratrion = 2f;
+        float currentDisolveTime = 0;
+        float dissolveHeight_start = 20f;
+        float dissolveHeight_target = -10f;
+        float dissolveHeight;
+
+        materialPropertyBlock.SetFloat("_enableDissolve", 1f);
+        skinnedMeshRenderer.SetPropertyBlock(materialPropertyBlock);
+
+        while (currentDisolveTime < dissolveTimeDuratrion)
+        {
+            currentDisolveTime += Time.deltaTime;
+            dissolveHeight = Mathf.Lerp(dissolveHeight_start, dissolveHeight_target, currentDisolveTime / dissolveTimeDuratrion);
+            materialPropertyBlock.SetFloat("_dissolve_height", dissolveHeight);
+            skinnedMeshRenderer.SetPropertyBlock(materialPropertyBlock);
+            yield return null;
+        }
+
+        DropHeathOrb();
+    }
+
+    private void DropHeathOrb()
+    {
+        var _item = Instantiate(healthOrb, transform.position, Quaternion.identity);
     }
 }

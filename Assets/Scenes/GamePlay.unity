@@ -3692,6 +3692,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerTrans: {fileID: 1296684859}
+  healthOrb: {fileID: 1336205876270937569, guid: 9a56e48a29bd4584098513c6435aa572,
+    type: 3}
 --- !u!114 &1639812705
 MonoBehaviour:
   m_ObjectHideFlags: 0

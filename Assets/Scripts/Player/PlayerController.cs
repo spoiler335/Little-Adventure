@@ -43,7 +43,7 @@ public class PlayerController : MonoBehaviour
 
         animator.SetFloat(speedHash, movementVelocity.magnitude);
 
-        movementVelocity *= moveSpeed * Time.fixedDeltaTime;
+        movementVelocity *= moveSpeed * Time.deltaTime;
 
         if (movementVelocity != Vector3.zero)
             transform.rotation = Quaternion.LookRotation(movementVelocity);
@@ -64,9 +64,11 @@ public class PlayerController : MonoBehaviour
                 {
                     float timePassed = Time.time - attackStartTime;
                     float lerpTime = timePassed / attackSlideDuration;
-                    movementVelocity = Vector3.Lerp(transform.forward * attackSlideSpeed, Vector3.zero, lerpTime);
+                    movementVelocity = Vector3.Lerp(transform.forward * attackSlideSpeed * Time.deltaTime, Vector3.zero, lerpTime);
                 }
                 break;
+            case CharacterState.Dead:
+                return;
         }
 
         if (!character.isGrounded)
@@ -74,7 +76,7 @@ public class PlayerController : MonoBehaviour
         else
             verticalVelocity = gravity * 0.3f;
 
-        movementVelocity += verticalVelocity * Vector3.up * Time.fixedDeltaTime;
+        movementVelocity += verticalVelocity * Vector3.up * Time.deltaTime;
 
         character.Move(movementVelocity);
     }
@@ -88,6 +90,8 @@ public class PlayerController : MonoBehaviour
             case CharacterState.Attacking:
                 DisableDamageCaster();
                 break;
+            case CharacterState.Dead:
+                return;
         }
 
         switch (newState)
@@ -98,6 +102,10 @@ public class PlayerController : MonoBehaviour
                 animator.SetTrigger("Attack");
                 attackStartTime = Time.time;
                 break;
+            case CharacterState.Dead:
+                character.enabled = false;
+                animator.SetTrigger("Death");
+                return;
         }
 
         currentCharacterState = newState;
@@ -114,6 +122,8 @@ public class PlayerController : MonoBehaviour
     public void ApplyDamage(int damageAmt)
     {
         health.ApplyDamage(damageAmt);
+
+        if (health.currentHealth <= 0) SwitchStateTo(CharacterState.Dead);
     }
 
     public void EnableDamageCaster() => damageCaster.EnableDamageCaster();
@@ -123,5 +133,6 @@ public class PlayerController : MonoBehaviour
 public enum CharacterState
 {
     Normal,
-    Attacking
+    Attacking,
+    Dead
 }
