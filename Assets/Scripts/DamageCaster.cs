@@ -40,7 +40,15 @@ public class DamageCaster : MonoBehaviour
                 EventsModel.PLAY_SLASH_VFX?.Invoke(hit.point + new Vector3(0, 0.5f, 0));
             }
 
-            EventsModel.PLAY_ENEMY_BEGIN_HIT_VFX?.Invoke(transform.parent.position);
+            if (other.CompareTag("Enemy"))
+            {
+                EventsModel.PLAY_ENEMY_BEGIN_HIT_VFX?.Invoke(transform.parent.position);
+            }
+
+            if (other.CompareTag("Player"))
+            {
+                EventsModel.ADD_IMPACT_ON_PLAYER?.Invoke(hit.point + new Vector3(0, 0.5f, 0));
+            }
 
             damageTargetList.Add(other);
         }

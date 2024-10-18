@@ -6,6 +6,7 @@ public class EnemyController : MonoBehaviour
 {
     [SerializeField] private Transform playerTrans;
     [SerializeField] private GameObject healthOrb;
+    [SerializeField] private DamageCaster damageCaster;
 
     private CharacterController character;
     private float moveSpeed = 2f;
@@ -58,6 +59,7 @@ public class EnemyController : MonoBehaviour
             case CharacterState.Normal:
                 break;
             case CharacterState.Attacking:
+                DisableDamageCaster();
                 break;
             case CharacterState.Dead:
                 return;
@@ -151,4 +153,8 @@ public class EnemyController : MonoBehaviour
     {
         var _item = Instantiate(healthOrb, transform.position, Quaternion.identity);
     }
+
+    public void EnableDamageCaster() => damageCaster.EnableDamageCaster();
+    public void DisableDamageCaster() => damageCaster.DisableDamageCaster();
+
 }

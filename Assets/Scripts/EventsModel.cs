@@ -5,5 +5,5 @@ public static class EventsModel
 {
     public static UnityAction<Vector3> PLAY_SLASH_VFX;
     public static UnityAction<Vector3> PLAY_ENEMY_BEGIN_HIT_VFX;
-
+    public static UnityAction<Vector3> ADD_IMPACT_ON_PLAYER;
 }
