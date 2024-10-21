@@ -15,4 +15,5 @@ public class InputManager
     public float GetRight() => inputActions.Player.Movement.ReadValue<Vector2>().y;
 
     public bool IsAttackClicked() => inputActions.Player.Attack.WasPressedThisFrame();
+    public bool IsSlideClicked() => inputActions.Player.Slide.WasPressedThisFrame();
 }

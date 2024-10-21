@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.VFX;
 
@@ -26,6 +27,7 @@ public class PlayerController : MonoBehaviour
     private bool isPlayerInvincible;
     private float invincibleDuratrion = 2f;
     private float attackAnimationDuration;
+    private float slideSpeed = 9f;
 
     private InputManager input => DI.di.input;
     private void Awake()
@@ -49,7 +51,6 @@ public class PlayerController : MonoBehaviour
     private void UnsubscribeEvents()
     {
         EventsModel.ADD_IMPACT_ON_PLAYER -= AddImpactOnPlayer;
-
     }
 
     private void OnDestroy() => UnsubscribeEvents();
@@ -66,6 +67,12 @@ public class PlayerController : MonoBehaviour
         if (input.IsAttackClicked() && character.isGrounded)
         {
             SwitchStateTo(CharacterState.Attacking);
+            return;
+        }
+
+        if (input.IsSlideClicked() && character.isGrounded)
+        {
+            SwitchStateTo(CharacterState.Slide);
             return;
         }
 
@@ -120,6 +127,9 @@ public class PlayerController : MonoBehaviour
                 }
                 impactOnPlayer = Vector3.Lerp(impactOnPlayer, Vector3.zero, Time.deltaTime * 5);
                 break;
+            case CharacterState.Slide:
+                movementVelocity = transform.forward * slideSpeed * Time.deltaTime;
+                break;
         }
 
         if (!character.isGrounded)
@@ -142,12 +152,13 @@ public class PlayerController : MonoBehaviour
             case CharacterState.Attacking:
                 DisableDamageCaster();
                 playerVFX.StopBlade();
-
                 break;
             case CharacterState.BeginHit:
                 break;
             case CharacterState.Dead:
                 return;
+            case CharacterState.Slide:
+                break;
         }
 
         switch (newState)
@@ -163,6 +174,9 @@ public class PlayerController : MonoBehaviour
                 isPlayerInvincible = true;
                 StartCoroutine(DelayCancelInvincible());
                 break;
+            case CharacterState.Slide:
+                animator.SetTrigger("Slide");
+                break;
             case CharacterState.Dead:
                 character.enabled = false;
                 animator.SetTrigger("Death");
@@ -175,6 +189,7 @@ public class PlayerController : MonoBehaviour
         Debug.Log($"Player Swiching State To :: {currentCharacterState}");
     }
 
+    public void SlideAnimEnds() => SwitchStateTo(CharacterState.Normal);
     public void AttackAnimEnds() => SwitchStateTo(CharacterState.Normal);
 
     public void BeginHitAnimEnds()
@@ -282,5 +297,6 @@ public enum CharacterState
     Normal,
     Attacking,
     Dead,
-    BeginHit
+    BeginHit,
+    Slide
 }
