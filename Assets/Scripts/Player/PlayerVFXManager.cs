@@ -5,6 +5,8 @@ public class PlayerVFXManager : MonoBehaviour
 {
     [SerializeField] private VisualEffect footvisualEffect;
     [SerializeField] private ParticleSystem blade01;
+    [SerializeField] private ParticleSystem blade02;
+    [SerializeField] private ParticleSystem blade03;
     [SerializeField] private VisualEffect slashVfx;
     [SerializeField] private VisualEffect healVfx;
 
@@ -19,9 +21,20 @@ public class PlayerVFXManager : MonoBehaviour
         else footvisualEffect.Stop();
     }
 
-    public void PlayBlade01Vfx()
+    public void PlayBlade01Vfx() => blade01.Play();
+    public void PlayBlade02Vfx() => blade02.Play();
+    public void PlayBlade03Vfx() => blade03.Play();
+
+    public void StopBlade()
     {
-        blade01.Play();
+        blade01.Simulate(0);
+        blade01.Stop();
+
+        blade02.Simulate(0);
+        blade02.Stop();
+
+        blade03.Simulate(0);
+        blade03.Stop();
     }
 
     private void PlaySlashVfx(Vector3 pos)

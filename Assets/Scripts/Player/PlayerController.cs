@@ -25,6 +25,7 @@ public class PlayerController : MonoBehaviour
     private Vector3 impactOnPlayer;
     private bool isPlayerInvincible;
     private float invincibleDuratrion = 2f;
+    private float attackAnimationDuration;
 
     private InputManager input => DI.di.input;
     private void Awake()
@@ -96,6 +97,19 @@ public class PlayerController : MonoBehaviour
                     float lerpTime = timePassed / attackSlideDuration;
                     movementVelocity = Vector3.Lerp(transform.forward * attackSlideSpeed * Time.deltaTime, Vector3.zero, lerpTime);
                 }
+
+                if (input.IsAttackClicked() && character.isGrounded)
+                {
+                    string currentClipName = animator.GetCurrentAnimatorClipInfo(0)[0].clip.name;
+                    attackAnimationDuration = animator.GetCurrentAnimatorStateInfo(0).normalizedTime;
+
+                    if (currentClipName != "LittleAdventurerAndie_ATTACK_03" && attackAnimationDuration > 0.5f && attackAnimationDuration < 0.7f)
+                    {
+                        SwitchStateTo(CharacterState.Attacking);
+                        CalculatePlayerMovement();
+                    }
+                }
+
                 break;
             case CharacterState.Dead:
                 return;
@@ -127,6 +141,8 @@ public class PlayerController : MonoBehaviour
                 break;
             case CharacterState.Attacking:
                 DisableDamageCaster();
+                playerVFX.StopBlade();
+
                 break;
             case CharacterState.BeginHit:
                 break;
