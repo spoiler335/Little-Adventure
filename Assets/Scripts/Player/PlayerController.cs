@@ -57,6 +57,7 @@ public class PlayerController : MonoBehaviour
 
     private void Start()
     {
+        currentCharacterState = CharacterState.Normal;
         speedHash = Animator.StringToHash("Speed");
         airBorneHash = Animator.StringToHash("AirBorne");
         playerVFX.PlayHealingVfx();

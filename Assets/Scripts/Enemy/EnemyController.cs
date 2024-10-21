@@ -154,7 +154,23 @@ public class EnemyController : MonoBehaviour
         var _item = Instantiate(healthOrb, transform.position, Quaternion.identity);
     }
 
-    public void EnableDamageCaster() => damageCaster.EnableDamageCaster();
-    public void DisableDamageCaster() => damageCaster.DisableDamageCaster();
+    public void EnableDamageCaster()
+    {
+        if (damageCaster)
+            damageCaster.EnableDamageCaster();
+    }
 
+    public void DisableDamageCaster()
+    {
+        if (damageCaster)
+            damageCaster.DisableDamageCaster();
+    }
+
+    public void RotateToTarget()
+    {
+        if (currentCharacterState != CharacterState.Dead)
+        {
+            transform.LookAt(playerTrans, Vector3.up);
+        }
+    }
 }
