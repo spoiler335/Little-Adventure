@@ -1,11 +1,13 @@
 using System;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.VFX;
 
 public class PlayerController : MonoBehaviour
 {
     [SerializeField] private DamageCaster damageCaster;
     private CharacterController character;
+    private PlayerVFXManager playerVFX;
     private float moveSpeed = 10f;
     private Vector3 movementVelocity;
     private float verticalVelocity;
@@ -30,6 +32,7 @@ public class PlayerController : MonoBehaviour
         character = GetComponent<CharacterController>();
         animator = GetComponent<Animator>();
         health = GetComponent<Health>();
+        playerVFX = GetComponent<PlayerVFXManager>();
         skinnedMeshRenderer = GetComponentInChildren<SkinnedMeshRenderer>();
         materialPropertyBlock = new MaterialPropertyBlock();
         skinnedMeshRenderer.GetPropertyBlock(materialPropertyBlock);
@@ -54,6 +57,7 @@ public class PlayerController : MonoBehaviour
     {
         speedHash = Animator.StringToHash("Speed");
         airBorneHash = Animator.StringToHash("AirBorne");
+        playerVFX.PlayHealingVfx();
     }
 
     private void CalculatePlayerMovement()
@@ -157,7 +161,10 @@ public class PlayerController : MonoBehaviour
 
     public void AttackAnimEnds() => SwitchStateTo(CharacterState.Normal);
 
-    public void BeginHitAnimEnds() => SwitchStateTo(CharacterState.Normal);
+    public void BeginHitAnimEnds()
+    {
+        SwitchStateTo(CharacterState.Normal);
+    }
 
     public void ApplyDamage(int damageAmt)
     {
@@ -193,6 +200,31 @@ public class PlayerController : MonoBehaviour
 
     public void EnableDamageCaster() => damageCaster.EnableDamageCaster();
     public void DisableDamageCaster() => damageCaster.DisableDamageCaster();
+
+    public void PickupItem(Pickups item)
+    {
+        switch (item.pickUpType)
+        {
+            case PickUpType.Health:
+                AddHealth(item.value);
+                break;
+            case PickUpType.Coin:
+                AddCoins(item.value);
+                break;
+        }
+    }
+
+    private void AddHealth(int value)
+    {
+        health.Increasehealth(value);
+        playerVFX.PlayHealingVfx();
+        Debug.Log($"Health Increase to {health.currentHealth}");
+    }
+
+    private void AddCoins(int coins)
+    {
+        DI.di.economy.AddCoins(coins);
+    }
 
     private IEnumerator MaterialBlink()
     {

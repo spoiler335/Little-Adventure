@@ -8,5 +8,7 @@ public class DI
 
     public InputManager input = new InputManager();
 
+    public EconomyManager economy = new EconomyManager();
+
     private DI() { }
 }

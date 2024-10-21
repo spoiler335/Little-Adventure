@@ -6,6 +6,7 @@ public class PlayerVFXManager : MonoBehaviour
     [SerializeField] private VisualEffect footvisualEffect;
     [SerializeField] private ParticleSystem blade01;
     [SerializeField] private VisualEffect slashVfx;
+    [SerializeField] private VisualEffect healVfx;
 
     private void Awake()
     {
@@ -27,6 +28,11 @@ public class PlayerVFXManager : MonoBehaviour
     {
         slashVfx.transform.position = pos;
         slashVfx.Play();
+    }
+
+    public void PlayHealingVfx()
+    {
+        healVfx.Play();
     }
 
     private void OnDestroy()

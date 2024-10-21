@@ -17,4 +17,10 @@ public class Health : MonoBehaviour
         if (currentHealth <= 0) currentHealth = 0;
         Debug.Log($"{gameObject.name} :: Curent-Health :: {currentHealth}");
     }
+
+    public void Increasehealth(int value)
+    {
+        currentHealth += value;
+        if (currentHealth >= MaxHealth) currentHealth = MaxHealth;
+    }
 }
