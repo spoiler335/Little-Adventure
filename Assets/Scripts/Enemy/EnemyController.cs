@@ -1,13 +1,14 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.Assertions;
 
 public class EnemyController : MonoBehaviour
 {
-    [SerializeField] private Transform playerTrans;
     [SerializeField] private GameObject healthOrb;
     [SerializeField] private DamageCaster damageCaster;
 
+    private Transform playerTrans;
     private CharacterController character;
     private float moveSpeed = 2f;
     private Vector3 movementVelocity;
@@ -18,6 +19,9 @@ public class EnemyController : MonoBehaviour
     private MaterialPropertyBlock materialPropertyBlock;
     private SkinnedMeshRenderer skinnedMeshRenderer;
     private Health health;
+    private float spwanDuration = 2f;
+    private bool isInvincible;
+    private float currentSpawnDuration;
 
     private void Awake()
     {
@@ -29,11 +33,11 @@ public class EnemyController : MonoBehaviour
         materialPropertyBlock = new MaterialPropertyBlock();
         skinnedMeshRenderer.GetPropertyBlock(materialPropertyBlock);
         health = GetComponent<Health>();
-    }
+        playerTrans = GameObject.FindGameObjectWithTag("Player").transform;
+        Assert.IsNotNull(playerTrans, "Player Not Found");
 
-    private void Start()
-    {
-        currentCharacterState = CharacterState.Normal;
+        SwitchStateTo(CharacterState.Spawn);
+
     }
 
     private void CalculateEnemyMovement()
@@ -63,6 +67,9 @@ public class EnemyController : MonoBehaviour
                 break;
             case CharacterState.Dead:
                 return;
+            case CharacterState.Spawn:
+                isInvincible = false;
+                break;
         }
 
         switch (newState)
@@ -78,6 +85,11 @@ public class EnemyController : MonoBehaviour
                 anim.SetTrigger("Death");
                 StartCoroutine(MaterialDissolve());
                 break;
+            case CharacterState.Spawn:
+                isInvincible = true;
+                currentSpawnDuration = spwanDuration;
+                StartCoroutine(MaterialBlink());
+                break;
         }
 
         currentCharacterState = newState;
@@ -92,6 +104,8 @@ public class EnemyController : MonoBehaviour
 
     public void ApplyDamage(int damageAmt)
     {
+        if (isInvincible) return;
+
         health.ApplyDamage(damageAmt);
 
         if (health.currentHealth <= 0) SwitchStateTo(CharacterState.Dead);
@@ -110,6 +124,11 @@ public class EnemyController : MonoBehaviour
                 break;
             case CharacterState.Dead:
                 return;
+            case CharacterState.Spawn:
+                currentSpawnDuration -= Time.deltaTime;
+                if (currentSpawnDuration <= 0)
+                    SwitchStateTo(CharacterState.Normal);
+                break;
         }
     }
 
@@ -172,5 +191,29 @@ public class EnemyController : MonoBehaviour
         {
             transform.LookAt(playerTrans, Vector3.up);
         }
+    }
+
+    private IEnumerator MaterialAppear()
+    {
+        float dissolveTimerDuration = currentSpawnDuration;
+        float currentDissolveTime = 0;
+        float dissolveHeight_start = -10f;
+        float dissolveHeight_target = 20f;
+        float dissolveHeight;
+
+        materialPropertyBlock.SetFloat("_enableDissolve", 1f);
+        skinnedMeshRenderer.SetPropertyBlock(materialPropertyBlock);
+
+        while (currentDissolveTime < dissolveTimerDuration)
+        {
+            currentDissolveTime += Time.deltaTime;
+            dissolveHeight = Mathf.Lerp(dissolveHeight_start, dissolveHeight_target, currentDissolveTime / dissolveTimerDuration);
+            materialPropertyBlock.SetFloat("_dissolve_height", dissolveHeight);
+            skinnedMeshRenderer.SetPropertyBlock(materialPropertyBlock);
+            yield return null;
+        }
+
+        materialPropertyBlock.SetFloat("_enableDissolve", 0f);
+        skinnedMeshRenderer.SetPropertyBlock(materialPropertyBlock);
     }
 }

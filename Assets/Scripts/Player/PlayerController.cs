@@ -299,5 +299,6 @@ public enum CharacterState
     Attacking,
     Dead,
     BeginHit,
-    Slide
+    Slide,
+    Spawn
 }
