@@ -32,6 +32,14 @@ public class EnemyVfxManager : MonoBehaviour
         Destroy(newSplashVfx, 10f);
     }
 
+    public void StopAllVFx()
+    {
+        footStep.Stop();
+        smashVfx.Stop();
+        splashVfx.Stop();
+        beginHitVfx.Stop();
+    }
+
     private void OnDestroy()
     {
         EventsModel.PLAY_ENEMY_BEGIN_HIT_VFX -= PlayBeginHitVfx;

@@ -84,6 +84,8 @@ public class EnemyController : MonoBehaviour
                 character.enabled = false;
                 anim.SetTrigger("Death");
                 StartCoroutine(MaterialDissolve());
+                EventsModel.ENEMY_DIED?.Invoke(this);
+                GetComponent<EnemyVfxManager>().StopAllVFx();
                 break;
             case CharacterState.Spawn:
                 isInvincible = true;
