@@ -16,8 +16,9 @@ public class EnemyVfxManager : MonoBehaviour
     public void BurstFootStep() => footStep.SendEvent("OnPlay");
     public void PlaySmashVfx() => smashVfx.SendEvent("OnPlay");
 
-    private void PlayBeginHitVfx(Vector3 attackerPosition)
+    private void PlayBeginHitVfx(Vector3 attackerPosition, GameObject go)
     {
+        if (go != gameObject) return;
         Vector3 forceFoward = transform.position - attackerPosition;
         forceFoward.Normalize();
         forceFoward.y = 0;
