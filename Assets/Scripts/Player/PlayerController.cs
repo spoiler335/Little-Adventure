@@ -1,8 +1,5 @@
-using System;
 using System.Collections;
-using UnityEditor;
 using UnityEngine;
-using UnityEngine.VFX;
 
 public class PlayerController : MonoBehaviour
 {
@@ -57,7 +54,7 @@ public class PlayerController : MonoBehaviour
 
     private void Start()
     {
-        currentCharacterState = CharacterState.Normal;
+        SwitchStateTo(CharacterState.Normal);
         speedHash = Animator.StringToHash("Speed");
         airBorneHash = Animator.StringToHash("AirBorne");
         playerVFX.PlayHealingVfx();
@@ -117,7 +114,6 @@ public class PlayerController : MonoBehaviour
                         CalculatePlayerMovement();
                     }
                 }
-
                 break;
             case CharacterState.Dead:
                 return;
@@ -182,6 +178,7 @@ public class PlayerController : MonoBehaviour
                 character.enabled = false;
                 animator.SetTrigger("Death");
                 StartCoroutine(MaterialDissolve());
+                EventsModel.PLAYER_DEAD?.Invoke();
                 return;
         }
 

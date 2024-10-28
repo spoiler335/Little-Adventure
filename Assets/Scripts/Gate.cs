@@ -12,19 +12,9 @@ public class Gate : MonoBehaviour
     private void Awake()
     {
         gateCollider = GetComponent<Collider>();
-
-        SubscribeEvents();
-    }
-    private void SubscribeEvents()
-    {
-        EventsModel.ALL_ENEMIES_DEAD += OnAllEnemiesDead;
     }
 
-    private void UnsubscribeEvents()
-    {
-        EventsModel.ALL_ENEMIES_DEAD -= OnAllEnemiesDead;
-    }
-    private IEnumerator OpenGate()
+    private IEnumerator OpenGateCor()
     {
         float currrentDuration = 0;
 
@@ -42,10 +32,5 @@ public class Gate : MonoBehaviour
         gateCollider.enabled = false;
     }
 
-    private void OnAllEnemiesDead()
-    {
-        StartCoroutine(OpenGate());
-    }
-
-    private void OnDestroy() => UnsubscribeEvents();
+    public void OpenGate() => StartCoroutine(OpenGateCor());
 }

@@ -7,11 +7,7 @@ public class EconomyManager
     {
         model = new EconomyModel();
     }
-
-    public void AddCoins(int value)
-    {
-        model.coins += value;
-    }
+    public void AddCoins(int value) => model.coins += value;
 }
 
 public class EconomyModel
