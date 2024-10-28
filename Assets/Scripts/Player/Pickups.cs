@@ -2,7 +2,8 @@ using UnityEngine;
 
 public class Pickups : MonoBehaviour
 {
-    public PickUpType pickUpType;
+    [field: SerializeField] public PickUpType pickUpType { get; private set; }
+    [SerializeField] private ParticleSystem collectedVfx;
     public int value = 20;
 
     private void OnTriggerEnter(Collider other)
@@ -10,6 +11,7 @@ public class Pickups : MonoBehaviour
         if (other.CompareTag("Player"))
         {
             other.GetComponent<PlayerController>().PickupItem(this);
+            if (collectedVfx) collectedVfx.Play();
             Destroy(gameObject);
         }
     }
