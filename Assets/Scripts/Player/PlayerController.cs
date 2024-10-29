@@ -25,6 +25,8 @@ public class PlayerController : MonoBehaviour
     private float invincibleDuratrion = 2f;
     private float attackAnimationDuration;
     private float slideSpeed = 9f;
+    private float blockInputDuration = 0.5f;
+
 
     private InputManager input => DI.di.input;
     private void Awake()
@@ -50,18 +52,20 @@ public class PlayerController : MonoBehaviour
         EventsModel.ADD_IMPACT_ON_PLAYER -= AddImpactOnPlayer;
     }
 
-    private void OnDestroy() => UnsubscribeEvents();
-
     private void Start()
     {
         SwitchStateTo(CharacterState.Normal);
         speedHash = Animator.StringToHash("Speed");
         airBorneHash = Animator.StringToHash("AirBorne");
         playerVFX.PlayHealingVfx();
+        EventsModel.UPDATE_PLAYER_HEALTH?.Invoke(health.currentHealth);
     }
 
     private void CalculatePlayerMovement()
     {
+        blockInputDuration -= Time.deltaTime;
+        if (blockInputDuration > 0) return;
+
         if (input.IsAttackClicked() && character.isGrounded)
         {
             SwitchStateTo(CharacterState.Attacking);
@@ -200,6 +204,7 @@ public class PlayerController : MonoBehaviour
         if (isPlayerInvincible) return;
 
         health.ApplyDamage(damageAmt);
+        EventsModel.UPDATE_PLAYER_HEALTH?.Invoke(health.currentHealth);
 
         StartCoroutine(MaterialBlink());
 
@@ -288,6 +293,8 @@ public class PlayerController : MonoBehaviour
             yield return null;
         }
     }
+
+    private void OnDestroy() => UnsubscribeEvents();
 }
 
 public enum CharacterState

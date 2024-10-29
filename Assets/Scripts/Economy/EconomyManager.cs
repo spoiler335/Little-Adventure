@@ -1,13 +1,18 @@
 
 public class EconomyManager
 {
-    public EconomyModel model { get; private set; }
+    private EconomyModel model;
 
+    public int coins => model.coins;
     public EconomyManager()
     {
         model = new EconomyModel();
     }
-    public void AddCoins(int value) => model.coins += value;
+    public void AddCoins(int value)
+    {
+        model.coins += value;
+        EventsModel.COINS_ECONOMY_CHANGED?.Invoke();
+    }
 }
 
 public class EconomyModel

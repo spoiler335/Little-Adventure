@@ -1,6 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class InputManager
 {
@@ -9,6 +8,13 @@ public class InputManager
     {
         inputActions = new PlayerControls();
         inputActions.Enable();
+
+        inputActions.Player.Pause.performed += OnPauseClicked;
+    }
+
+    private void OnPauseClicked(InputAction.CallbackContext context)
+    {
+        EventsModel.ON_PAUSE_CLICKED?.Invoke();
     }
 
     public float GetForward() => inputActions.Player.Movement.ReadValue<Vector2>().x;

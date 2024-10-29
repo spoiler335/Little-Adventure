@@ -2,13 +2,11 @@ using UnityEngine;
 
 public class Health : MonoBehaviour
 {
-    private const int MaxHealth = 100;
-
     public int currentHealth { get; private set; } = 0;
 
     private void Awake()
     {
-        currentHealth = MaxHealth;
+        currentHealth = Constants.MAX_HEALTH;
     }
 
     public void ApplyDamage(int damage)
@@ -21,6 +19,6 @@ public class Health : MonoBehaviour
     public void Increasehealth(int value)
     {
         currentHealth += value;
-        if (currentHealth >= MaxHealth) currentHealth = MaxHealth;
+        if (currentHealth >= Constants.MAX_HEALTH) currentHealth = Constants.MAX_HEALTH;
     }
 }
