@@ -42,7 +42,8 @@ public class DamageCaster : MonoBehaviour
 
             if (other.CompareTag("Enemy"))
             {
-                EventsModel.PLAY_ENEMY_BEGIN_HIT_VFX?.Invoke(transform.parent.position,other.gameObject);
+                EventsModel.PLAY_ENEMY_BEGIN_HIT_VFX?.Invoke(transform.parent.position, other.gameObject);
+                EventsModel.ADD_IMPACT_ON_ENEMY?.Invoke(hit.point + new Vector3(0, 0.5f, 0), other.gameObject);
             }
 
             if (other.CompareTag("Player"))

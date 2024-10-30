@@ -193,11 +193,7 @@ public class PlayerController : MonoBehaviour
 
     public void SlideAnimEnds() => SwitchStateTo(CharacterState.Normal);
     public void AttackAnimEnds() => SwitchStateTo(CharacterState.Normal);
-
-    public void BeginHitAnimEnds()
-    {
-        SwitchStateTo(CharacterState.Normal);
-    }
+    public void BeginHitAnimEnds() => SwitchStateTo(CharacterState.Normal);
 
     public void ApplyDamage(int damageAmt)
     {

@@ -2,6 +2,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Assertions;
+using UnityEngine.Rendering;
 
 public class EnemyController : MonoBehaviour
 {
@@ -12,6 +13,7 @@ public class EnemyController : MonoBehaviour
     private CharacterController character;
     private float moveSpeed = 2f;
     private Vector3 movementVelocity;
+    private Vector3 impactOnEnemy;
     private NavMeshAgent agent;
     private Animator anim;
     private int speedHash;
@@ -21,6 +23,7 @@ public class EnemyController : MonoBehaviour
     private Health health;
     private float spwanDuration = 2f;
     private bool isInvincible;
+    private float invincibleDuratrion = 2f;
     private float currentSpawnDuration;
 
     private void Awake()
@@ -36,8 +39,19 @@ public class EnemyController : MonoBehaviour
         playerTrans = GameObject.FindGameObjectWithTag("Player").transform;
         Assert.IsNotNull(playerTrans, "Player Not Found");
 
-        SwitchStateTo(CharacterState.Spawn);
 
+
+        SwitchStateTo(CharacterState.Spawn);
+    }
+
+    private void SubscribeEvents()
+    {
+        EventsModel.ADD_IMPACT_ON_ENEMY += AddImpactOnBeingHit;
+    }
+
+    private void UnsubscribeEvents()
+    {
+        EventsModel.ADD_IMPACT_ON_ENEMY -= AddImpactOnBeingHit;
     }
 
     private void CalculateEnemyMovement()
@@ -87,6 +101,11 @@ public class EnemyController : MonoBehaviour
                 EventsModel.ENEMY_DIED?.Invoke(this);
                 GetComponent<EnemyVfxManager>().StopAllVFx();
                 break;
+            case CharacterState.BeginHit:
+                anim.SetTrigger("BeginHit");
+                isInvincible = true;
+                StartCoroutine(DelayCancelInvincible());
+                break;
             case CharacterState.Spawn:
                 isInvincible = true;
                 currentSpawnDuration = spwanDuration;
@@ -98,17 +117,16 @@ public class EnemyController : MonoBehaviour
 
         Debug.Log($"Enemy Swiching State To :: {currentCharacterState}");
     }
-    public void AttackAnimEnds()
-    {
-        Debug.Log($"Enemy Attack Animation Ends");
-        SwitchStateTo(CharacterState.Normal);
-    }
+    public void AttackAnimEnds() => SwitchStateTo(CharacterState.Normal);
+    public void BeginHitAnimEnds() => SwitchStateTo(CharacterState.Normal);
 
     public void ApplyDamage(int damageAmt)
     {
         if (isInvincible) return;
 
         health.ApplyDamage(damageAmt);
+
+        SwitchStateTo(CharacterState.BeginHit);
 
         if (health.currentHealth <= 0) SwitchStateTo(CharacterState.Dead);
 
@@ -126,6 +144,13 @@ public class EnemyController : MonoBehaviour
                 break;
             case CharacterState.Dead:
                 return;
+            case CharacterState.BeginHit:
+                if (impactOnEnemy.magnitude > 0.2f)
+                {
+                    movementVelocity = impactOnEnemy * Time.deltaTime;
+                }
+                impactOnEnemy = Vector3.Lerp(impactOnEnemy, Vector3.zero, Time.deltaTime * 5);
+                break;
             case CharacterState.Spawn:
                 currentSpawnDuration -= Time.deltaTime;
                 if (currentSpawnDuration <= 0)
@@ -195,6 +220,26 @@ public class EnemyController : MonoBehaviour
         }
     }
 
+    private void ApplyDamageImpact(Vector3 attackerPos, float force)
+    {
+        var impackDir = transform.position - attackerPos;
+        impackDir.Normalize();
+        impackDir.y = 0;
+        impactOnEnemy = impackDir * force;
+    }
+
+    private void AddImpactOnBeingHit(Vector3 attackPos, GameObject go)
+    {
+        if (go == gameObject)
+            ApplyDamageImpact(attackPos, 2.5f);
+    }
+
+    private IEnumerator DelayCancelInvincible()
+    {
+        yield return new WaitForSeconds(invincibleDuratrion);
+        isInvincible = false;
+    }
+
     private IEnumerator MaterialAppear()
     {
         float dissolveTimerDuration = currentSpawnDuration;
@@ -218,4 +263,6 @@ public class EnemyController : MonoBehaviour
         materialPropertyBlock.SetFloat("_enableDissolve", 0f);
         skinnedMeshRenderer.SetPropertyBlock(materialPropertyBlock);
     }
+
+    private void OnDestroy() => UnsubscribeEvents();
 }
