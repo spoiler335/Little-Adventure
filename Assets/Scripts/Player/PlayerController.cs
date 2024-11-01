@@ -248,6 +248,7 @@ public class PlayerController : MonoBehaviour
     private void AddHealth(int value)
     {
         health.Increasehealth(value);
+        EventsModel.UPDATE_PLAYER_HEALTH?.Invoke(health.currentHealth);
         playerVFX.PlayHealingVfx();
         Debug.Log($"Health Increase to {health.currentHealth}");
     }
