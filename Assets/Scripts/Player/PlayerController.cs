@@ -115,7 +115,7 @@ public class PlayerController : MonoBehaviour
                     if (currentClipName != "LittleAdventurerAndie_ATTACK_03" && attackAnimationDuration > 0.5f && attackAnimationDuration < 0.7f)
                     {
                         SwitchStateTo(CharacterState.Attacking);
-                        CalculatePlayerMovement();
+                        // CalculatePlayerMovement();
                     }
                 }
                 break;
@@ -169,6 +169,7 @@ public class PlayerController : MonoBehaviour
             case CharacterState.Attacking:
                 animator.SetTrigger("Attack");
                 attackStartTime = Time.time;
+                RorateToCursosr();
                 break;
             case CharacterState.BeginHit:
                 animator.SetTrigger("BeginHit");
@@ -287,6 +288,17 @@ public class PlayerController : MonoBehaviour
             materialPropertyBlock.SetFloat("_dissolve_height", dissolveHeight);
             skinnedMeshRenderer.SetPropertyBlock(materialPropertyBlock);
             yield return null;
+        }
+    }
+
+    private void RorateToCursosr()
+    {
+        Ray ray = Camera.main.ScreenPointToRay(input.getLookRotation);
+
+        if (Physics.Raycast(ray, out RaycastHit hit, 1000, 1 << LayerMask.NameToLayer("CursorTest")))
+        {
+            var cursorPoint = hit.point;
+            transform.rotation = Quaternion.LookRotation(cursorPoint - transform.position, Vector3.up);
         }
     }
 

@@ -154,7 +154,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0ae2019ffa204c34aa8025908a8d76e0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerTrans: {fileID: 0}
   healthOrb: {fileID: 1336205876270937569, guid: 9a56e48a29bd4584098513c6435aa572,
     type: 3}
   damageCaster: {fileID: 1345303743983316561}
@@ -790,6 +789,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Particle BeingHit
+      objectReference: {fileID: 0}
+    - target: {fileID: 1936046340871599824, guid: 0570e3315dd21b34094ca0475d3310a7,
+        type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 3469780265090588746, guid: 0570e3315dd21b34094ca0475d3310a7,
+        type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 5680359259124363205, guid: 0570e3315dd21b34094ca0475d3310a7,
         type: 3}

@@ -2,7 +2,6 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.Assertions;
-using UnityEngine.Rendering;
 
 public class EnemyController : MonoBehaviour
 {
@@ -100,6 +99,7 @@ public class EnemyController : MonoBehaviour
                 StartCoroutine(MaterialDissolve());
                 EventsModel.ENEMY_DIED?.Invoke(this);
                 GetComponent<EnemyVfxManager>().StopAllVFx();
+                GetComponentInChildren<SkinnedMeshRenderer>().gameObject.layer = 0;
                 break;
             case CharacterState.BeginHit:
                 anim.SetTrigger("BeginHit");
