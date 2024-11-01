@@ -13,10 +13,8 @@ public class MainMenuUIManager : MonoBehaviour
         quitButton.onClick.AddListener(OnQuitButtonClicked);
     }
 
-    private void OnStartButtonClicked()
-    {
-        SceneManager.LoadScene(SceneConstants.GAMEPLAY);
-    }
+    private void Start() => Cursor.lockState = CursorLockMode.Confined;
+    private void OnStartButtonClicked() => SceneManager.LoadScene(SceneConstants.GAMEPLAY);
 
     private void OnQuitButtonClicked() => Application.Quit();
 }

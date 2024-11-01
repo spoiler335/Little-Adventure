@@ -15,6 +15,16 @@ public class GamePlayPauseMenu : MonoBehaviour
         restartButton.onClick.AddListener(OnRestartClicked);
     }
 
+    private void OnEnable()
+    {
+        Cursor.lockState = CursorLockMode.Confined;
+    }
+
+    private void OnDisable()
+    {
+        Cursor.lockState = CursorLockMode.Locked;
+    }
+
     private void OnResumeClicked()
     {
         EventsModel.ON_RESUME_CLICKED?.Invoke();
@@ -31,4 +41,5 @@ public class GamePlayPauseMenu : MonoBehaviour
         Time.timeScale = 1f;
         SceneManager.LoadScene(SceneConstants.GAMEPLAY);
     }
+
 }

@@ -54,6 +54,7 @@ public class PlayerController : MonoBehaviour
 
     private void Start()
     {
+        Cursor.lockState = CursorLockMode.Locked;
         SwitchStateTo(CharacterState.Normal);
         speedHash = Animator.StringToHash("Speed");
         airBorneHash = Animator.StringToHash("AirBorne");
@@ -115,7 +116,7 @@ public class PlayerController : MonoBehaviour
                     if (currentClipName != "LittleAdventurerAndie_ATTACK_03" && attackAnimationDuration > 0.5f && attackAnimationDuration < 0.7f)
                     {
                         SwitchStateTo(CharacterState.Attacking);
-                        // CalculatePlayerMovement();
+                        CalculatePlayerMovement();
                     }
                 }
                 break;
@@ -169,7 +170,6 @@ public class PlayerController : MonoBehaviour
             case CharacterState.Attacking:
                 animator.SetTrigger("Attack");
                 attackStartTime = Time.time;
-                RorateToCursosr();
                 break;
             case CharacterState.BeginHit:
                 animator.SetTrigger("BeginHit");
@@ -218,10 +218,7 @@ public class PlayerController : MonoBehaviour
         impactOnPlayer = impackDir * force;
     }
 
-    private void AddImpactOnPlayer(Vector3 attackPos)
-    {
-        ApplyDamageImpact(attackPos, 10f);
-    }
+    private void AddImpactOnPlayer(Vector3 attackPos) => ApplyDamageImpact(attackPos, 10f);
 
     private IEnumerator DelayCancelInvincible()
     {
@@ -252,12 +249,7 @@ public class PlayerController : MonoBehaviour
         playerVFX.PlayHealingVfx();
         Debug.Log($"Health Increase to {health.currentHealth}");
     }
-
-    private void AddCoins(int coins)
-    {
-        DI.di.economy.AddCoins(coins);
-    }
-
+    private void AddCoins(int coins) => DI.di.economy.AddCoins(coins);
     private IEnumerator MaterialBlink()
     {
         materialPropertyBlock.SetFloat("_blink", 0.4f);
@@ -289,17 +281,6 @@ public class PlayerController : MonoBehaviour
             materialPropertyBlock.SetFloat("_dissolve_height", dissolveHeight);
             skinnedMeshRenderer.SetPropertyBlock(materialPropertyBlock);
             yield return null;
-        }
-    }
-
-    private void RorateToCursosr()
-    {
-        Ray ray = Camera.main.ScreenPointToRay(input.getLookRotation);
-
-        if (Physics.Raycast(ray, out RaycastHit hit, 1000, 1 << LayerMask.NameToLayer("CursorTest")))
-        {
-            var cursorPoint = hit.point;
-            transform.rotation = Quaternion.LookRotation(cursorPoint - transform.position, Vector3.up);
         }
     }
 

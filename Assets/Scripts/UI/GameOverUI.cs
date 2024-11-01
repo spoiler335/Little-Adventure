@@ -16,10 +16,19 @@ public class GameOverUI : MonoBehaviour
         mainMenuButton.onClick.AddListener(OnMainMenuClicked);
         restartButton.onClick.AddListener(OnRestartClicked);
     }
+    private void OnEnable()
+    {
+        Cursor.lockState = CursorLockMode.Confined;
+    }
 
+    private void OnDisable()
+    {
+        Cursor.lockState = CursorLockMode.Locked;
+    }
     private void OnMainMenuClicked()
     {
-
+        Time.timeScale = 1f;
+        SceneManager.LoadScene(SceneConstants.MAIN_MENU);
     }
 
     private void OnRestartClicked()

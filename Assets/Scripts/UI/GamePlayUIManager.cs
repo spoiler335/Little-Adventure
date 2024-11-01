@@ -57,7 +57,6 @@ public class GamePlayUIManager : MonoBehaviour
                 pauseMenuUI.gameObject.SetActive(true);
                 currentUIState = GameUIState.Pause;
                 Time.timeScale = 0;
-                Time.timeScale = 0;
                 break;
             case GameUIState.Pause:
                 pauseMenuUI.gameObject.SetActive(false);
@@ -69,6 +68,7 @@ public class GamePlayUIManager : MonoBehaviour
 
     private void OnPlayerDead()
     {
+        Time.timeScale = 0;
         currentUIState = GameUIState.GameOver;
         gameOverUI.SetGameOverStatus(false);
         gameOverUI.gameObject.SetActive(true);
@@ -76,6 +76,7 @@ public class GamePlayUIManager : MonoBehaviour
 
     private void OnGameFinished()
     {
+        Time.timeScale = 0;
         currentUIState = GameUIState.GameFinished;
         gameOverUI.SetGameOverStatus(true);
         gameOverUI.gameObject.SetActive(false);
