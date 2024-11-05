@@ -11,10 +11,7 @@ public class GamePlayUIManager : MonoBehaviour
 
     private GameUIState currentUIState;
 
-    private void Awake()
-    {
-        SubscribeEvents();
-    }
+    private void Awake() => SubscribeEvents();
 
     private void SubscribeEvents()
     {
@@ -76,10 +73,9 @@ public class GamePlayUIManager : MonoBehaviour
 
     private void OnGameFinished()
     {
-        Time.timeScale = 0;
         currentUIState = GameUIState.GameFinished;
         gameOverUI.SetGameOverStatus(true);
-        gameOverUI.gameObject.SetActive(false);
+        gameOverUI.gameObject.SetActive(true);
     }
 
 

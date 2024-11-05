@@ -7,7 +7,6 @@ public static class EventsModel
     public static UnityAction<Vector3, GameObject> PLAY_ENEMY_BEGIN_HIT_VFX;
     public static UnityAction<Vector3> ADD_IMPACT_ON_PLAYER;
     public static UnityAction<Vector3, GameObject> ADD_IMPACT_ON_ENEMY;
-    public static UnityAction<int> ENEMIES_SPAWNED;
     public static UnityAction<EnemyController> ENEMY_DIED;
     public static UnityAction REGION_CLEARED;
     public static UnityAction ALL_REGIONS_CLEARED;

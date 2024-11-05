@@ -8,6 +8,8 @@ public class EnemyController : MonoBehaviour
     [SerializeField] private GameObject healthOrb;
     [SerializeField] private DamageCaster damageCaster;
 
+    [HideInInspector] public int regionId;
+
     private Transform playerTrans;
     private CharacterController character;
     private float moveSpeed = 2f;
