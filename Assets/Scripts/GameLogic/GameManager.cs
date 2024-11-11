@@ -20,7 +20,7 @@ public class GameManager : MonoBehaviour
     private void OnRegionCleard()
     {
         ++regionsCleard;
-        Debug.Log($"Regions :: Cleard :: {regionsCleard}");
+        Debug.Log($"Regions :: Cleared :: {regionsCleard}");
         if (regionsCleard >= Constants.MAX_REGIONS)
         {
             EventsModel.ALL_REGIONS_CLEARED?.Invoke();

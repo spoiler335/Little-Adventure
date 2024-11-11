@@ -117,7 +117,7 @@ public class EnemyController : MonoBehaviour
 
         currentCharacterState = newState;
 
-        Debug.Log($"Enemy Swiching State To :: {currentCharacterState}");
+        Debug.Log($"Enemy Switching State To :: {currentCharacterState}");
     }
     public void AttackAnimEnds() => SwitchStateTo(CharacterState.Normal);
     public void BeginHitAnimEnds() => SwitchStateTo(CharacterState.Normal);

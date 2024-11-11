@@ -53,7 +53,7 @@ public class SingleRegion : MonoBehaviour
             spawnedEnemy.regionId = Id;
         }
 
-
+        enemyCount = spawnPoints.Count;
         hasSpawned = true;
     }
 
