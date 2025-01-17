@@ -38,6 +38,7 @@
         "**/*.OBJ": true,
         "**/*.asset": true,
         "**/*.cubemap": true,
+        "**/*.csproj": true,
         "**/*.flare": true,
         "**/*.mat": true,
         "**/*.meta": true,
